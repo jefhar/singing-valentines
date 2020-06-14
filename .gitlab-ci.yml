@@ -3,7 +3,7 @@ image: jefhar/singing-valentines:pcov
 stages:
   - build_cache
   - test
-  - publicize
+  - deploy
 
 variables:
   MYSQL_ROOT_PASSWORD: 'rootpw'
@@ -91,7 +91,7 @@ dusktest:
     name: testing
 
 deploy_stable:
-  stage: publicize
+  stage: deploy
   script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
@@ -107,7 +107,7 @@ deploy_stable:
     - stable
 
 pages:
-  stage: publicize
+  stage: deploy
   dependencies:
     - test
   script:
@@ -115,7 +115,7 @@ pages:
     - mv tests/coverage public
   artifacts:
     paths:
-      - public
+      - public/coverage
     expire_in: 30 days
   only:
     - master

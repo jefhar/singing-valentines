@@ -130,3 +130,6 @@ _ide_helper_models.php
 /.idea/copyright/Jefhar.xml
 /.idea/deployment.xml
 /.idea/webServers.xml
+.jekyll-cache/
+_site/
+docs/
