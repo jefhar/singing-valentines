@@ -13,6 +13,7 @@ variables:
 
 refresh_cache:
   stage: build_cache
+  image: jefhar/singing-valentines:yarn
   cache:
     key: "$CI_PROJECT_PATH_SLUG-$CI_COMMIT_BRANCH"
     paths:
@@ -21,9 +22,6 @@ refresh_cache:
       - .yarn
       - public
   script:
-    - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-    - apt-get install -y nodejs
-    - npm install -g yarn
     - composer install --no-plugins --no-scripts
     - yarn config set cache-folder .yarn
     - yarn install --pure-lockfile
