@@ -1,4 +1,4 @@
-# jefhar/singingvalentines
+# jefhar/singing-valentines:latest
 # For unit testing and deployment
 # Set the base image for subsequent instructions
 FROM phpdockerio/php74-fpm:latest
@@ -8,11 +8,11 @@ ARG VCS_REF
 LABEL maintainer="Jeff Harris <jeff@jeffharris.us>" \
   org.label-schema.build-date=$BUILD_DATE \
   org.label-schema.description="Singing Valentines Ordering Site." \
-  org.label-schema.name="main.singingvalentines" \
+  org.label-schema.name="main.singing-valentines" \
   org.label-schema.schema-version="1.0" \
-  org.label-schema.url="https://singingvalentines.jeffharris.us" \
+  org.label-schema.url="https://singing-valentines.jeffharris.us" \
   org.label-schema.vcs-ref=$VCS_REF \
-  org.label-schema.vcs-url="https://gitlab.com/jefhar/singingvalentines" \
+  org.label-schema.vcs-url="https://gitlab.com/jefhar/singing-valentines" \
   PHP="7.4"
 
 # Update packages
