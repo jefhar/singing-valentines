@@ -1,2 +1,2 @@
 build:
-	docker build -t jefhar/singingvalentines:latest .
+	docker build -t jefhar/singingvalentines:pcov .
