@@ -1,2 +1,2 @@
 build:
-	docker build -t jefhar/singingvalentines:xdebug .
+	docker build -t jefhar/singing-valentines:xdebug .

@@ -1,7 +1,6 @@
-# jefhar/singingvalentines:xdebug
+# jefhar/singing-valentines:xdebug
 # For unit testing and deployment
-# Set the base image for subsequent instructions
-FROM jefhar/singingvalentines:latest
+FROM jefhar/singing-valentines:latest
 
 # Install xdebug
 RUN apt-get update \
