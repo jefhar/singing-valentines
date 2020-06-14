@@ -13,7 +13,7 @@ networks:
 services:
   mailhog:
     image: mailhog/mailhog:latest
-    container_name: singval-mailhog
+    container_name: singing-valentines-mailhog
     restart: unless-stopped
     ports:
       - "8025:8025"
@@ -24,7 +24,7 @@ services:
 
   redis:
     image: redis:alpine
-    container_name: singval-redis
+    container_name: singing-valentines-redis
     restart: unless-stopped
     labels:
       - traefik.enable=false
@@ -33,7 +33,7 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: singval-mysql
+    container_name: singing-valentines-mysql
     restart: unless-stopped
     working_dir: /application
     volumes:
@@ -42,9 +42,9 @@ services:
       - ./phpdocker/mysql/default-authentication-plugin:/etc/mysql/mysql.conf.d/default-authentication-plugin.cnf
     environment:
       - MYSQL_ROOT_PASSWORD=rootpw
-      - MYSQL_DATABASE=singval
-      - MYSQL_USER=singval
-      - MYSQL_PASSWORD=singval
+      - MYSQL_DATABASE=singing-valentines
+      - MYSQL_USER=singing-valentines
+      - MYSQL_PASSWORD=singing-valentines
     healthcheck:
       test: mysqladmin -h 127.0.0.1 -u root -prootpw --silent ping
       interval: 5s
@@ -58,7 +58,7 @@ services:
 
   webserver:
     image: nginx:alpine
-    container_name: singval-webserver
+    container_name: singing-valentines-webserver
     restart: always
     working_dir: /application
     volumes:
@@ -73,8 +73,8 @@ services:
       - internal
       - web
     labels:
-      - traefik.backend=singval
-      - traefik.frontend.rule=Host:singval.jeffharris.us
+      - traefik.backend=singing-valentines
+      - traefik.frontend.rule=Host:singing-valentines.jeffharris.us
       - traefik.docker.network=web
       - trafik.port=80
       - traefik.enable=true
@@ -82,8 +82,8 @@ services:
       - 8080:80
 
   php-fpm:
-    build: phpdocker/php-fpm
-    container_name: singval-php-fpm
+    image: jefhar/singing-valentines
+    container_name: singing-valentines-php-fpm
     restart: always
     working_dir: /application
     volumes:

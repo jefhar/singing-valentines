@@ -1,3 +1,6 @@
+# This is not as slim as https://hub.docker.com/r/jefhar/singing-valentines.
+# The image presented here is a general purpose php environment like you might
+# find in a shared hosting environment.
 FROM phpdockerio/php74-fpm:latest
 ARG BUILD_DATE
 ARG VCS_REF
@@ -5,17 +8,14 @@ ARG VCS_REF
 LABEL maintainer="Jeff Harris <jeff@jeffharris.us>" \
   org.label-schema.build-date=$BUILD_DATE \
   org.label-schema.description="Singing Valentines backend" \
-  org.label-schema.name="backend.singval" \
+  org.label-schema.name="backend.singing-valentines" \
   org.label-schema.schema-version="1.0" \
-  org.label-schema.url="https://singval.jeffharris.us" \
+  org.label-schema.url="https://singing-valentines.jeffharris.us" \
   org.label-schema.vcs-ref=$VCS_REF \
-  org.label-schema.vcs-url="https://gitlab.com/jefhar/singval" \
+  org.label-schema.vcs-url="https://gitlab.com/jefhar/singing-valentines" \
   PHP="7.4"
 
 # For local use:
-#   Sometimes github thinks you're spamming the site too much. Create an auth key
-#   and put it in the auth.json.example file and rename it to auth.json then uncomment.
-# ADD auth.json /root/.composer/auth.json
 
 # Update packages
 RUN apt-get update \
@@ -26,6 +26,7 @@ RUN apt-get update \
 		php7.4-mbstring \
         php7.4-mysql \
         php7.4-opcache \
+        php7.4-pcov \
         php7.4-pdo \
         php7.4-redis \
         php7.4-sqlite3 \

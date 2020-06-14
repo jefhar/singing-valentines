@@ -1,4 +1,4 @@
-image: jefhar/singingvalentines:pcov
+image: jefhar/singing-valentines:pcov
 
 stages:
   - build_cache
@@ -7,9 +7,9 @@ stages:
 
 variables:
   MYSQL_ROOT_PASSWORD: 'rootpw'
-  MYSQL_DATABASE: 'singval'
-  MYSQL_USER: 'singval'
-  MYSQL_PASSWORD: 'singval'
+  MYSQL_DATABASE: 'singing-valentines'
+  MYSQL_USER: 'singing-valentines'
+  MYSQL_PASSWORD: 'singing-valentines'
 
 refresh_cache:
   stage: build_cache
@@ -102,7 +102,7 @@ deploy_stable:
     - ~/.composer/vendor/bin/envoy run deploy --web_hook=$LOG_SLACK_WEBHOOK_URL --release_url=$CI_ENVIRONMENT_URL
   environment:
     name: staging
-    url: https://singval.jeffharris.us
+    url: https://singing-valentines.jeffharris.us
   only:
     - stable
 

@@ -1,8 +1,8 @@
 @servers(['web' => 'deploy@falcon.jeffharris.us'])
 
 @setup
-    $repository = 'git@gitlab.com:jehfar/singval.git';
-    $app_dir = '/var/www/singval/';
+    $repository = 'git@gitlab.com:jefhar/singing-valentines.git';
+    $app_dir = '/var/www/singing-valentines/';
     $releases_dir = $app_dir . '/releases';
     $release = date('YmdHis');
     $new_release_dir = $releases_dir . '/' . $release;
@@ -70,7 +70,7 @@
 @endtask
 
 @finished
-    @slack($web_hook, 'singval-log', ':robot_face: New deployment pushed to ' . $release_url)
+    @slack($web_hook, 'singing-valentines-log', ':robot_face: New deployment pushed to ' . $release_url)
 @endfinished
 
 @task('run_npm')

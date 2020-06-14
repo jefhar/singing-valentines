@@ -1,5 +1,5 @@
 build:
-	docker build -t jefhar/singval .
+	docker build -t jefhar/singing-valentines .
 
 docker:
 	docker-compose up -d --build
@@ -17,13 +17,13 @@ clean:
 	docker system prune
 
 composerinstall:
-	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singval sh -c 'cd /app && composer install'
+	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singing-valentines sh -c 'cd /app && composer install'
 
 composerupdate:
-	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singval sh -c 'cd /app && composer update'
+	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singing-valentines sh -c 'cd /app && composer update'
 
 checkcomposer:
-	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singval sh -c 'cd /app && vendor/bin/security-checker security:check composer.lock'
+	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singing-valentines sh -c 'cd /app && vendor/bin/security-checker security:check composer.lock'
 
 ci:
 	gitlab-runner exec docker test
@@ -53,17 +53,17 @@ swagger:
 	docker run --rm -p 8088:8080 swaggerapi/swagger-editor
 
 phpcs:
-	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singval sh -c 'cd /app && composer phpcs'
+	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singing-valentines sh -c 'cd /app && composer phpcs'
 
 phpcbf:
-	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singval sh -c 'cd /app && composer phpcbf'
+	docker run --rm -v "$(CURDIR):/app:delegated" jefhar/singing-valentines sh -c 'cd /app && composer phpcbf'
 
 pretest:
 	rm -rf tests/coverage*
-	docker run --rm -v"$(CURDIR):/app:delegated" jefhar/singval sh -c 'cd /app && composer pretest'
+	docker run --rm -v"$(CURDIR):/app:delegated" jefhar/singing-valentines sh -c 'cd /app && composer pretest'
 
 test:
-	docker run --rm -v"$(CURDIR):/app:delegated" jefhar/singval sh -c 'cd /app && composer test'
+	docker run --rm -v"$(CURDIR):/app:delegated" jefhar/singing-valentines sh -c 'cd /app && composer test'
 
 deploy:
 	docker network create web || echo "Docker network web already created."
