@@ -1,32 +1,38 @@
-image: phpdockerio/php74-fpm:latest
+image: jefhar/singingvalentines:pcov
 
 stages:
-  - build
+  - build_cache
   - test
-  - stage
+  - publicize
+
+variables:
+  MYSQL_ROOT_PASSWORD: 'rootpw'
+  MYSQL_DATABASE: 'singval'
+  MYSQL_USER: 'singval'
+  MYSQL_PASSWORD: 'singval'
 
 refresh_cache:
-  stage: build
+  stage: build_cache
   cache:
     key: "$CI_PROJECT_PATH_SLUG-$CI_COMMIT_BRANCH"
     paths:
       - vendor
       - node_modules
       - .yarn
+      - public
   script:
-    - curl -sL https://deb.nodesource.com/setup_13.x | bash -
+    - curl -sL https://deb.nodesource.com/setup_14.x | bash -
     - apt-get install -y nodejs
     - npm install -g yarn
     - composer install --no-plugins --no-scripts
     - yarn config set cache-folder .yarn
     - yarn install --pure-lockfile
+    - npm run prod
 
 test:
   stage: test
   script:
     - apt-get update
-    - apt-get -y --no-install-recommends install php7.4-dom php7.4-gd php7.4-json php7.4-mbstring php7.4-opcache php7.4-pcov php7.4-pdo php7.4-sqlite3 php7.4-zip sqlite unzip
-    - apt-get install -y --only-upgrade php7.4-cli php7.4-common
     - cp .env.testing .env
     - touch database/database.sqlite
     - composer install --no-plugins --no-scripts
@@ -38,37 +44,28 @@ test:
     policy: pull
     paths:
       - vendor
-      - node_modules
-      - .yarn
+      - public
   artifacts:
     paths:
-    - tests/coverage
+      - tests/coverage
   except:
     - ci
   interruptible: true
+  environment:
+    name: testing
 
 dusktest:
-  variables:
-    MYSQL_ROOT_PASSWORD: 'rootpw'
-    MYSQL_DATABASE: 'serviceandgoods'
-    MYSQL_USER: 'serviceandgoods'
-    MYSQL_PASSWORD: 'serviceandgoods'
+  stage: test
   services:
     - mysql:8.0
   allow_failure: true
   image: edbizarro/gitlab-ci-pipeline-php:7.4-chromium
-  stage: test
   script:
-    - yarn config set cache-folder .yarn
-    - yarn install --pure-lockfile
-    - yarn run prod
-    - composer install --no-plugins --no-scripts --no-progress --no-suggest --prefer-dist --optimize-autoloader
-    - vendor/bin/dusk-updater detect --auto-update
     - cp .env.dusk.ci .env
     - php artisan key:generate
     - php artisan migrate:refresh
     - php artisan db:seed --class UsersTableSeeder
-    - php artisan serve > /dev/null 2>&1 &
+    - php artisan serve &
     - ./vendor/laravel/dusk/bin/chromedriver-linux --verbose --port=9515 --whitelisted-ips= &
     - echo "Waiting for chrome to settle..."
     - sleep 5
@@ -89,10 +86,12 @@ dusktest:
       - ./tests/Browser/screenshots # for Dusk screenshots
       - ./tests/Browser/console
     expire_in: 7 days
-    when: always
+  when: manual
+  environment:
+    name: testing
 
-deploy_staging:
-  stage: stage
+deploy_stable:
+  stage: publicize
   script:
     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
     - eval $(ssh-agent -s)
@@ -105,23 +104,10 @@ deploy_staging:
     name: staging
     url: https://singval.jeffharris.us
   only:
-    - tags
-
-build_images:
-  image: docker:git
-  services:
-  - docker:dind
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker build -t registry.gitlab.com/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest .
-    - docker push registry.gitlab.com/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME:latest
-  when: manual
-  only:
-    changes:
-      - Dockerfile
+    - stable
 
 pages:
-  stage: stage
+  stage: publicize
   dependencies:
     - test
   script:
@@ -134,3 +120,4 @@ pages:
   only:
     - master
     - development
+    - stable
