@@ -1,0 +1,11 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+parameters:
+    ignoreErrors:
+        - '#Method App\\Http\\Middleware\\Authenticate::redirectTo\(\) should return string\|null but return statement is missing.#'
+        - '#Function factory invoked with [0-9] parameter[s]?, 0 required.#'
+        - '#Call to an undefined method Laravel\\Dusk\\Browser::createType().#'
+    paths:
+        - app
+        - tests
+    level: 4
