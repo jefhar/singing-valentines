@@ -1,7 +1,6 @@
-# jefhar/singingvalentines:pcov
+# jefhar/singing-valentines:pcov
 # For unit testing and deployment
-# Set the base image for subsequent instructions
-FROM jefhar/singingvalentines:latest
+FROM jefhar/singing-valentines:latest
 
 # Install pcov
 RUN apt-get update \
