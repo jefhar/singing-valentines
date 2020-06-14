@@ -35,7 +35,6 @@ test:
     - composer install --no-plugins --no-scripts
     - php artisan key:generate
     - composer pretest
-    - grep APP_KEY .env
     - composer test
   cache:
     key: "$CI_PROJECT_PATH_SLUG-$CI_COMMIT_BRANCH"
@@ -110,6 +109,7 @@ pages:
     - test
   script:
     - rm -rf public
+    - mkdir public
     - mv tests/coverage public
   artifacts:
     paths:
