@@ -30,12 +30,12 @@ refresh_cache:
 test:
   stage: test
   script:
-    - apt-get update
     - cp .env.testing .env
     - touch database/database.sqlite
     - composer install --no-plugins --no-scripts
     - php artisan key:generate
     - composer pretest
+    - grep APP_KEY .env
     - composer test
   cache:
     key: "$CI_PROJECT_PATH_SLUG-$CI_COMMIT_BRANCH"
