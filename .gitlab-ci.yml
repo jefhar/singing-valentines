@@ -102,20 +102,3 @@ deploy_stable:
     url: https://singing-valentines.jeffharris.us
   only:
     - stable
-
-pages:
-  stage: deploy
-  dependencies:
-    - test
-  script:
-    - rm -rf public
-    - mkdir public
-    - mv tests/coverage public
-  artifacts:
-    paths:
-      - public/coverage
-    expire_in: 30 days
-  only:
-    - master
-    - development
-    - stable
